@@ -38,48 +38,55 @@ visibility = 17
 # Login
 # TODO: Check for wrong login data
 payload = {'l': user, 'p': password}
-r = requests.post("http://www.sports-tracker.com/apiserver/v1/login?source=javascript", data=payload)
+r = requests.post("http://www.sports-tracker.com/apiserver/v1/login"
+                  "?source=javascript",
+                  data=payload)
 j = json.loads(r.text)
 skey = j['sessionkey']
 
-print "Logged in as %s" % (j['username'])
-print "Sessionkey is %s" % (skey)
+print("Logged in as {}".format(j['username']))
+print("Sessionkey is {}".format((skey)))
 
 cookies = dict(sessionkey=skey, dashboardFeed="my-workouts")
 headers = {'STTAuthorization': skey, 'Content-Type': 'application/json'}
 
 # Get the feed (first 9999 items)
-r = requests.get("http://www.sports-tracker.com/apiserver/v1/workouts?sortonst=true&limit=9999&offset=0", cookies=cookies, headers=headers)
+r = requests.get("http://www.sports-tracker.com/apiserver/v1/workouts"
+                 "?sortonst=true&limit=9999&offset=0",
+                 cookies=cookies, headers=headers)
 
 data = json.loads(r.text)
 
 # Loop through the result.
 for item in data['payload']:
-  print "workoutKey: %s" % (item['workoutKey'])
-  print "totalTime: %s" % (item['totalTime'])
-  print "visibilityFriends: %s" % (item['visibilityFriends'])
-  print "sharingFlags: %s" % (item['sharingFlags'])
+    print("workoutKey: {}".format((item['workoutKey'])))
+    print("totalTime: {}".format((item['totalTime'])))
+    print("visibilityFriends: {}".format((item['visibilityFriends'])))
+    print("sharingFlags: {}".format((item['sharingFlags'])))
 
-  if 'description' in item:
-    description = item['description']
-  else:
-    description = 'unnamed'
+    if 'description' in item:
+        description = item['description']
+    else:
+        description = 'unnamed'
 
-  if item['sharingFlags'] != visibility:
-    payload = [
-       {"totalDistance":item['totalDistance'],
-        "workoutKey":item['workoutKey'],
-        "activityId":item['activityId'],
-        "startTime":item['startTime'],
-        "totalTime":item['totalTime'],
-        "description":description,
-        "hrMaxValue":item['hrdata']['max'],
-        "hrAvgValue":item['hrdata']['avg'],
-        "energyConsumption":item['energyConsumption'],
-        "sharingFlags":visibility}
-    ]
-    r = requests.post("http://www.sports-tracker.com/apiserver/v1/workouts/header", cookies=cookies, headers=headers, data=json.dumps(payload))
-    print(r.text)
-  else:
-    print "Nothing to fix"
-    print
+    if item['sharingFlags'] != visibility:
+        payload = [
+            {"totalDistance": item['totalDistance'],
+             "workoutKey": item['workoutKey'],
+             "activityId": item['activityId'],
+             "startTime": item['startTime'],
+             "totalTime": item['totalTime'],
+             "description": description,
+             "hrMaxValue": item['hrdata']['max'],
+             "hrAvgValue": item['hrdata']['avg'],
+             "energyConsumption": item['energyConsumption'],
+             "sharingFlags": visibility}
+        ]
+        r = requests.post("http://www.sports-tracker.com/"
+                          "apiserver/v1/workouts/header",
+                          cookies=cookies, headers=headers,
+                          data=json.dumps(payload))
+        print(r.text)
+    else:
+        print("Nothing to fix")
+        print()
