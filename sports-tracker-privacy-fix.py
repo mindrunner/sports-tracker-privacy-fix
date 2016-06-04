@@ -26,10 +26,11 @@ __status__ = "Prototype"
 
 import requests
 import json
+import os
 
 # Setup
-user = ''
-password = ''
+user = os.environ.get('USERNAME')
+password = os.environ.get('PASSWORD')
 # 0  for private
 # 17 for friends
 # ?? for public
