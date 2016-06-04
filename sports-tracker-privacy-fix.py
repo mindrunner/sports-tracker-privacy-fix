@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # This file is part of sports-tracker-privacy-fix.  sports-tracker-privacy-fix
 # is free software: you can redistribute it and/or modify it under the terms of
